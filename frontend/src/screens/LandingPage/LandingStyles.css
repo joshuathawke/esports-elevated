@@ -2,7 +2,7 @@
     min-height: 93vh;
     display: flex;
     align-items: center;
-    background-image: url('../screens/esports-background.jpg');
+    background-image: url('./esports-background.jpg');
     background-position: center;
     background-size: cover;
 }
