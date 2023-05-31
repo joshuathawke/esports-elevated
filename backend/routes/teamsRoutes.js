@@ -1,9 +1,13 @@
 const express = require('express');
-const { getTeams, createTeam } = require('../controllers/teamController');
+const { getTeams, createTeam, getTeamById , updateTeam, deleteTeam} = require('../controllers/teamController');
+const { protect } = require('../middlewares/authMiddleware');
+
 const router = express.Router();
 
-router.route('/').get(getTeams)
-router.route('/create').post(createTeam)
-// router.route('/:id').get().put().delete();
+router.route('/').get(protect, getTeams)
+router.route('/create').post(protect, createTeam)
+router.route('/:id').get(getTeamById).put(protect, updateTeam).delete(protect, deleteTeam);
+    // .delete(protect, DeleteTeam);
+   
 
 module.exports = router;
