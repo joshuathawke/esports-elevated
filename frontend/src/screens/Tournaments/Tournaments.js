@@ -1,118 +1,90 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Button, Card } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteTournament, tournamentList } from "../../actions/tournamentActions";
 import MainScreen from "../../components/MainScreen";
+import Loading from "../../components/Loading";
+import ErrorMessage from "../../components/ErrorMessage";
 
-const Tournaments = () => {
-  const [tournaments, setTournaments] = useState([]);
-  const [expandedTournaments, setExpandedTournaments] = useState([]);
+const Tournaments = ({ search }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const tournamentsData = useSelector((state) => state.tournamentList);
+  const { loading, error, tournaments } = tournamentsData;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const tournamentDelete = useSelector((state) => state.tournamentDelete);
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete,
+  } = tournamentDelete;
 
   useEffect(() => {
-    // Fetch tournaments data from API or any other data source
-    // Update the 'tournaments' state with the fetched data
-    // For example:
-    // axios.get("/api/tournaments").then((response) => {
-    //     setTournaments(response.data);
-    // });
+    dispatch(tournamentList());
+    if (!userInfo) {
+      navigate("/tournaments");
+    }
+  }, [dispatch, navigate, userInfo, successDelete]);
 
-    // Mock data for testing
-    const mockTournaments = [
-      {
-        id: 1,
-        name: "Tournament A",
-        description: "Description A",
-        game_title: "Game A",
-        start_date: "2023-01-01",
-        end_date: "2023-01-10",
-        matches: ["Match A", "Match B"],
-      },
-      {
-        id: 2,
-        name: "Tournament B",
-        description: "Description B",
-        game_title: "Game B",
-        start_date: "2023-02-01",
-        end_date: "2023-02-10",
-        matches: ["Match C", "Match D"],
-      },
-      {
-        id: 3,
-        name: "Tournament C",
-        description: "Description C",
-        game_title: "Game C",
-        start_date: "2023-03-01",
-        end_date: "2023-03-10",
-        matches: ["Match E", "Match F"],
-      },
-    ];
-    setTournaments(mockTournaments);
-  }, []);
-
-  const toggleExpandTournament = (tournamentId) => {
-    if (expandedTournaments.includes(tournamentId)) {
-      setExpandedTournaments((prevExpandedTournaments) =>
-        prevExpandedTournaments.filter((id) => id !== tournamentId)
-      );
-    } else {
-      setExpandedTournaments((prevExpandedTournaments) => [
-        ...prevExpandedTournaments,
-        tournamentId,
-      ]);
+  const deleteHandler = (id) => {
+    if (window.confirm("Are you sure?")) {
+      dispatch(deleteTournament(id));
     }
   };
 
   return (
-    <MainScreen title="Tournaments">
-      <Link to="/createMatch">
-        <Button style={{ marginLeft: 10, marginBottom: 6 }} size="sm">
-          Create Tournament
+    <MainScreen title={`Welcome Back ${userInfo && userInfo.name}..`}>
+      <Link to="/createTournament">
+        <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">
+          Create New Tournament
         </Button>
       </Link>
-
-      {tournaments.map((tournament) => (
-        <Card key={tournament.id} style={{ display: "flex" }}>
-          <Card.Header style={{ display: "flex" }}>
-            <span
-              style={{
-                color: "black",
-                flex: 1,
-                cursor: "pointer",
-                alignSelf: "center",
-                fontSize: 20,
-                textDecoration: "none",
-              }}
-              onClick={() => toggleExpandTournament(tournament.id)}
-            >
-              {tournament.name}
-            </span>
-            <div>
-              <Button>Edit</Button>
-              <Button variant="danger" className="mx-2">
-                Delete
-              </Button>
-            </div>
-          </Card.Header>
-          {expandedTournaments.includes(tournament.id) && (
-            <Card.Body>
-              <Card.Text>
-                <strong>Description:</strong> {tournament.description}
-              </Card.Text>
-              <Card.Text>
-                <strong>Game Title:</strong> {tournament.game_title}
-              </Card.Text>
-              <Card.Text>
-                <strong>Start Date:</strong> {tournament.start_date}
-              </Card.Text>
-              <Card.Text>
-                <strong>End Date:</strong> {tournament.end_date}
-              </Card.Text>
-              <Card.Text>
-                <strong>Matches:</strong> {tournament.matches.join(", ")}
-              </Card.Text>
-            </Card.Body>
-          )}
-        </Card>
-      ))}
+      {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
+      {errorDelete && (
+        <ErrorMessage variant="danger">{errorDelete}</ErrorMessage>
+      )}
+      {loading && <Loading />}
+      {loadingDelete && <Loading />}
+      {tournaments &&
+        tournaments
+          .filter((filteredTournament) =>
+            filteredTournament.name.toLowerCase().includes(search.toLowerCase())
+          )
+          .reverse()
+          .map((tournament) => (
+            <Card key={tournament.id} className="my-3 p-3 rounded">
+              <Card.Body>
+                <Link to={`/tournament/${tournament.id}`}>
+                  <Card.Title as="div">
+                    <strong>{tournament.name}</strong>
+                  </Card.Title>
+                </Link>
+                <Card.Text as="div">
+                  <strong>Location: </strong>
+                  {tournament.location}
+                </Card.Text>
+                <Card.Text as="div">
+                  <strong>Start Date: </strong>
+                  {tournament.startDate.substring(0, 10)}
+                </Card.Text>
+                <Card.Text as="div">
+                  <strong>End Date: </strong>
+                  {tournament.endDate.substring(0, 10)}
+                </Card.Text>
+                <Button
+                  variant="danger"
+                  className="mx-2"
+                  onClick={() => deleteHandler(tournament.id)}
+                >
+                  Delete Tournament
+                </Button>
+              </Card.Body>
+            </Card>
+          ))}
     </MainScreen>
   );
 };

@@ -8,7 +8,7 @@ import { login } from "../../actions/userActions";
 import MainScreen from "../../components/MainScreen";
 import "./SignupForm.css";
 
-function SignupForm({ history }) {
+export const SignupForm = ({ history }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [pic, setPic] = useState(
@@ -142,4 +142,3 @@ function SignupForm({ history }) {
   );
 }
 
-export default SignupForm;

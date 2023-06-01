@@ -1,110 +1,118 @@
-import React, { useEffect, useState } from "react";
-import { Button, Card } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Accordion, Badge, Button, Card } from "react-bootstrap";
 import MainScreen from "../../components/MainScreen";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteTeam, teamList } from "../../actions/teamActions";
+import Loading from "../../components/Loading";
+import ErrorMessage from "../../components/ErrorMessage";
 
-const Teams = () => {
-  const [teams, setTeams] = useState([]);
-  const [expandedTeams, setExpandedTeams] = useState([]);
+const Teams = ({ search }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const teamsData = useSelector((state) => state.teamList);
+  const { loading, error, teams } = teamsData;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const teamDelete = useSelector((state) => state.teamDelete);
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete,
+  } = teamDelete;
 
   useEffect(() => {
-    // Fetch teams data from API or any other data source
-    // Update the 'teams' state with the fetched data
-    // For example:
-    // axios.get("/api/teams").then((response) => {
-    //     setTeams(response.data);
-    // });
+    dispatch(teamList());
+    if (!userInfo) {
+      navigate("/teams");
+    }
+  }, [dispatch, navigate, userInfo, successDelete]);
 
-    // Mock data for testing
-    const mockTeams = [
-      {
-        id: 1,
-        name: "Team A",
-        city: "City A",
-        country: "Country A",
-        dateCreated: "2023-01-01",
-        tournaments: ["Tournament A", "Tournament B"],
-      },
-      {
-        id: 2,
-        name: "Team B",
-        city: "City B",
-        country: "Country B",
-        dateCreated: "2023-02-01",
-        tournaments: ["Tournament C", "Tournament D"],
-      },
-      {
-        id: 3,
-        name: "Team C",
-        city: "City C",
-        country: "Country C",
-        dateCreated: "2023-03-01",
-        tournaments: ["Tournament E", "Tournament F"],
-      },
-    ];
-    setTeams(mockTeams);
-  }, []);
-
-  const toggleExpandTeam = (teamId) => {
-    if (expandedTeams.includes(teamId)) {
-      setExpandedTeams((prevExpandedTeams) =>
-        prevExpandedTeams.filter((id) => id !== teamId)
-      );
-    } else {
-      setExpandedTeams((prevExpandedTeams) => [...prevExpandedTeams, teamId]);
+  const deleteHandler = (id) => {
+    if (window.confirm("Are you sure?")) {
+      dispatch(deleteTeam(id));
     }
   };
 
   return (
-    <MainScreen title="Teams">
-      <Link to="/createMatch">
-        <Button style={{ marginLeft: 10, marginBottom: 6 }} size="sm">
-          Create Team
+    <MainScreen title={`Welcome Back ${userInfo && userInfo.name}..`}>
+      {console.log(teams)}
+      <Link to="/createTeam">
+        <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">
+          Create new Team
         </Button>
       </Link>
+      {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
+      {errorDelete && (
+        <ErrorMessage variant="danger">{errorDelete}</ErrorMessage>
+      )}
+      {loading && <Loading />}
+      {loadingDelete && <Loading />}
+      {teams &&
+        teams
+          .filter((filteredTeam) =>
+            filteredTeam.name.toLowerCase().includes(search.toLowerCase())
+          )
+          .reverse()
+          .map((team) => (
+            <Accordion key={team.id}>
+              <Card style={{ margin: 10 }}>
+                <Card.Header style={{ display: "flex" }}>
+                  <span
+                    style={{
+                      color: "black",
+                      textDecoration: "none",
+                      flex: 1,
+                      cursor: "pointer",
+                      alignSelf: "center",
+                      fontSize: 18,
+                    }}
+                  >
+                    <Accordion.Toggle
+                      as={Card.Text}
+                      variant="link"
+                      eventKey="0"
+                    >
+                      {team.name}
+                    </Accordion.Toggle>
+                  </span>
 
-      {teams.map((team) => (
-        <Card key={team.id} style={{ display: "flex" }}>
-          <Card.Header style={{ display: "flex" }}>
-            <span
-              style={{
-                color: "black",
-                flex: 1,
-                cursor: "pointer",
-                alignSelf: "center",
-                fontSize: 20,
-                textDecoration: "none",
-              }}
-              onClick={() => toggleExpandTeam(team.id)}
-            >
-              {team.name}
-            </span>
-            <div>
-              <Button>Edit</Button>
-              <Button variant="danger" className="mx-2">
-                Delete
-              </Button>
-            </div>
-          </Card.Header>
-          {expandedTeams.includes(team.id) && (
-            <Card.Body>
-              <Card.Text>
-                <strong>City:</strong> {team.city}
-              </Card.Text>
-              <Card.Text>
-                <strong>Country:</strong> {team.country}
-              </Card.Text>
-              <Card.Text>
-                <strong>Date Created:</strong> {team.dateCreated}
-              </Card.Text>
-              <Card.Text>
-                <strong>Tournaments:</strong>{" "}
-                {team.tournaments.join(", ")}
-              </Card.Text>
-            </Card.Body>
-          )}
-        </Card>
-      ))}
+                  <div>
+                    <Button href={`/team/${team.id}`}>Edit</Button>
+                    <Button
+                      variant="danger"
+                      className="mx-2"
+                      onClick={() => deleteHandler(team.id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </Card.Header>
+                <Accordion.Collapse eventKey="0">
+                  <Card.Body>
+                    <h4>
+                      <Badge variant="success">
+                        Country - {team.country}
+                      </Badge>
+                    </h4>
+                    <blockquote className="blockquote mb-0">
+                      <p>
+                        City: <strong>{team.city}</strong>
+                      </p>
+                      <footer className="blockquote-footer">
+                        Created on{" "}
+                        <cite title="Source Title">
+                          {team.dateCreated.substring(0, 10)}
+                        </cite>
+                      </footer>
+                    </blockquote>
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
+          ))}
     </MainScreen>
   );
 };

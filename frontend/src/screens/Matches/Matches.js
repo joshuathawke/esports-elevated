@@ -8,7 +8,7 @@ import { deleteMatch, matchList } from "../../actions/matchActions";
 import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
 
-function Matches({ search }) {
+const Matches = ({ search }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const matchesData = useSelector((state) => state.matchList);
