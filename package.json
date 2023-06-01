@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon backend/server.js",
     "client": "npm start --prefix frontend",
-    "dev": "concurrently \"npm start\" \"npm run client\""
+    "dev": "concurrently \"npm start\" \"npm run client\"",
+    "build": "react-scripts build"
   },
   "author": "Joshua Hawke",
   "license": "ISC",
