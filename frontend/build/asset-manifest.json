@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.c921e63b.css",
+    "main.js": "/static/js/main.ab6cbf70.js",
+    "static/js/787.cda612ba.chunk.js": "/static/js/787.cda612ba.chunk.js",
+    "static/media/esports-background.jpg": "/static/media/esports-background.01819ae01123133eb409.jpg",
+    "index.html": "/index.html",
+    "main.c921e63b.css.map": "/static/css/main.c921e63b.css.map",
+    "main.ab6cbf70.js.map": "/static/js/main.ab6cbf70.js.map",
+    "787.cda612ba.chunk.js.map": "/static/js/787.cda612ba.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c921e63b.css",
+    "static/js/main.ab6cbf70.js"
+  ]
+}

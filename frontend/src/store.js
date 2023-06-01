@@ -1,7 +1,7 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { legacy_createStore as createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { userLoginReducer, userSignupReducer } from './reducers/userReducers';
+import { userLoginReducer, userSignupReducer, userUpdateReducer } from './reducers/userReducers';
 import { matchListReducer, matchCreateReducer, matchUpdateReducer, matchDeleteReducer } from './reducers/matchReducers';
 import { teamListReducer, teamCreateReducer, teamDeleteReducer, teamUpdateReducer } from './reducers/teamReducers';
 import { tournamentListReducer, tournamentCreateReducer, tournamentDeleteReducer, tournamentUpdateReducer } from './reducers/tournamentReducers';
@@ -9,6 +9,7 @@ import { tournamentListReducer, tournamentCreateReducer, tournamentDeleteReducer
 const reducer = combineReducers({
     userLogin: userLoginReducer,
     userSignup: userSignupReducer,
+    userUpdate: userUpdateReducer,
     matchList: matchListReducer,
     matchCreate: matchCreateReducer,
     matchUpdate: matchUpdateReducer,

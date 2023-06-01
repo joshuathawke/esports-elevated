@@ -10,6 +10,7 @@ import SignupPage from './screens/SignUpPage/SignupPage';
 import Teams from './screens/Teams/Teams';
 import CreateMatch from './screens/Matches/CreateMatch';
 import SingleMatch from './screens/Matches/SingleMatch';
+import ProfilePage from './screens/ProfilePage/ProfilePage';
 
 const App = () => (
   <BrowserRouter>
@@ -23,6 +24,7 @@ const App = () => (
         <Route path="/creatematch" element={<CreateMatch />} />
         <Route path="/match/:id" element={<SingleMatch />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/signup" element={<SignupPage />} />
       </Routes>
     </main>
