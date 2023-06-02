@@ -36,9 +36,9 @@ function SignupPage() {
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
-      data.append("upload_preset", "notezipper");
-      data.append("cloud_name", "piyushproj");
-      fetch("https://api.cloudinary.com/v1_1/piyushproj/image/upload", {
+      data.append("upload_preset", "esports-elevated");
+      data.append("cloud_name", "djva5euno");
+      fetch("https://api.cloudinary.com/v1_1/djva5euno", {
         method: "post",
         body: data,
       })

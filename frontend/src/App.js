@@ -14,6 +14,8 @@ import CreateTournament from './screens/Tournaments/CreateTournament';
 import SingleMatch from './screens/Matches/SingleMatch';
 import ProfilePage from './screens/ProfilePage/ProfilePage';
 
+
+
 const App = () => (
   <BrowserRouter>
     <Header />
