@@ -1,38 +1,60 @@
-import { legacy_createStore as createStore, combineReducers, applyMiddleware } from 'redux';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import { userLoginReducer, userSignupReducer, userUpdateReducer } from './reducers/userReducers';
-import { matchListReducer, matchCreateReducer, matchUpdateReducer, matchDeleteReducer } from './reducers/matchReducers';
-import { teamListReducer, teamCreateReducer, teamDeleteReducer, teamUpdateReducer } from './reducers/teamReducers';
-import { tournamentListReducer, tournamentCreateReducer, tournamentDeleteReducer, tournamentUpdateReducer } from './reducers/tournamentReducers';
+import {
+  userLoginReducer,
+  userSignupReducer,
+  userUpdateReducer,
+} from './reducers/userReducers';
+import {
+  matchListReducer,
+  matchCreateReducer,
+  matchUpdateReducer,
+  matchDeleteReducer,
+} from './reducers/matchReducers';
+import {
+  teamListReducer,
+  teamCreateReducer,
+  teamDeleteReducer,
+  teamUpdateReducer,
+} from './reducers/teamReducers';
+import {
+  tournamentListReducer,
+  tournamentCreateReducer,
+  tournamentDeleteReducer,
+  tournamentUpdateReducer,
+} from './reducers/tournamentReducers';
 
-const reducer = combineReducers({
-    userLogin: userLoginReducer,
-    userSignup: userSignupReducer,
-    userUpdate: userUpdateReducer,
-    matchList: matchListReducer,
-    matchCreate: matchCreateReducer,
-    matchUpdate: matchUpdateReducer,
-    matchDelete: matchDeleteReducer,
-    teamList: teamListReducer,
-    teamCreate: teamCreateReducer,
-    teamUpdate: teamUpdateReducer,
-    teamDelete: teamDeleteReducer,
-    tournamentList: tournamentListReducer,
-    tournamentCreate: tournamentCreateReducer,
-    tournamentUpdate: tournamentUpdateReducer,
-    tournamentDelete: tournamentDeleteReducer
-
+const rootReducer = combineReducers({
+  userLogin: userLoginReducer,
+  userSignup: userSignupReducer,
+  userUpdate: userUpdateReducer,
+  matchList: matchListReducer,
+  matchCreate: matchCreateReducer,
+  matchUpdate: matchUpdateReducer,
+  matchDelete: matchDeleteReducer,
+  teamList: teamListReducer,
+  teamCreate: teamCreateReducer,
+  teamUpdate: teamUpdateReducer,
+  teamDelete: teamDeleteReducer,
+  tournamentList: tournamentListReducer,
+  tournamentCreate: tournamentCreateReducer,
+  tournamentUpdate: tournamentUpdateReducer,
+  tournamentDelete: tournamentDeleteReducer,
 });
 
-const userInfoFromStorage = localStorage.getItem('userInfo')? JSON.parse(localStorage.getItem('userInfo')) : null;
+const userInfoFromStorage = localStorage.getItem('userInfo')
+  ? JSON.parse(localStorage.getItem('userInfo'))
+  : null;
 
 const initialState = {
-    userLogin: { userInfo: userInfoFromStorage },
+  userLogin: { userInfo: userInfoFromStorage },
 };
-const middleware = [thunk];
-const store = createStore(reducer,
-    initialState,
-    composeWithDevTools(applyMiddleware(...middleware)));
+
+const store = configureStore({
+  reducer: rootReducer,
+  preloadedState: initialState,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
+  devTools: true, 
+});
 
 export default store;

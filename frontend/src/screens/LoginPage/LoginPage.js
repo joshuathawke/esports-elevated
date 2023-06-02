@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
 import { login } from "../../actions/userActions";
 import MainScreen from "../../components/MainScreen";
 import "./Login.css";
 
-function Login({ history }) {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
 
-  useEffect(() => {
-    if (userInfo) {
-      history.push("/userProfile");
-    }
-  }, [history, userInfo]);
-
+useEffect(() => {
+  if (userInfo) {
+    navigate("/profile");
+  }
+}, [navigate, userInfo]);
+  
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(login(email, password));

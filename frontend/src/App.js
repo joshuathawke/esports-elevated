@@ -5,8 +5,8 @@ import LandingPage from './screens/LandingPage/LandingPage';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Tournaments from './screens/Tournaments/Tournaments';
 import Matches from './screens/Matches/Matches';
-import Login from './screens/LoginPage/Login';
-import SignupPage from './screens/SignUpPage/SignupPage';
+import LoginPage from './screens/LoginPage/LoginPage';
+import SignupPage from './screens/SignupPage/SignupPage';
 import Teams from './screens/Teams/Teams';
 import CreateTeam from './screens/Teams/CreateTeam';
 import CreateMatch from './screens/Matches/CreateMatch';
@@ -27,7 +27,7 @@ const App = () => (
         <Route path="/createteam" element={<CreateTeam />} />
         <Route path="/createtournament" element={<CreateTournament />}/>
         <Route path="/match/:id" element={<SingleMatch />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/signup" element={<SignupPage />} />
       </Routes>

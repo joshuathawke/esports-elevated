@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
-import MainScreen from "../../components/MainScreen";
-import "./ProfilePage.css";
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfile } from "../../actions/userActions";
+import MainScreen from "../../components/MainScreen";
 import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
+import "./ProfilePage.css";
 
 const ProfilePage = ({ location, history }) => {
   const [name, setName] = useState("");
@@ -14,7 +15,7 @@ const ProfilePage = ({ location, history }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [picMessage, setPicMessage] = useState();
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -25,13 +26,13 @@ const ProfilePage = ({ location, history }) => {
 
   useEffect(() => {
     if (!userInfo) {
-      history.push("/");
+      navigate('/');
     } else {
       setName(userInfo.name);
       setEmail(userInfo.email);
       setPic(userInfo.pic);
     }
-  }, [history, userInfo]);
+  }, [navigate, userInfo]);
 
   const postDetails = (pics) => {
     setPicMessage(null);

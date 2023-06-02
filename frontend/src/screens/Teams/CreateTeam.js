@@ -5,13 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { createTeam } from "../../actions/teamActions";
 import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
+import { useNavigate } from "react-router-dom";
 
-const CreateTeam = ({ history }) => {
+const CreateTeam = () => {
   const [name, setName] = useState("");
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
   const [dateCreated, setDateCreated] = useState("");
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const teamCreate = useSelector((state) => state.teamCreate);
@@ -24,13 +25,13 @@ const CreateTeam = ({ history }) => {
     setDateCreated("");
   };
 
-  const submitHandler = (e) => {
+    const submitHandler = (e) => {
     e.preventDefault();
     dispatch(createTeam(name, country, city, dateCreated));
     if (!name || !country || !city || !dateCreated) return;
 
     resetHandler();
-    history.push("/teams");
+    navigate("/teams"); 
   };
 
   return (

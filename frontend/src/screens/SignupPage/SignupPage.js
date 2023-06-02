@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
-import { login } from "../../actions/userActions";
+import { signup } from "../../actions/userActions";
 import MainScreen from "../../components/MainScreen";
-import "./SignupForm.css";
+import "./SignupPage.css";
 
-export const SignupForm = ({ history }) => {
+function SignupPage() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [pic, setPic] = useState(
@@ -20,6 +20,7 @@ export const SignupForm = ({ history }) => {
   const [picMessage, setPicMessage] = useState(null);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const userSignup = useSelector((state) => state.userSignup);
   const { loading, error, userInfo } = userSignup;
@@ -35,9 +36,9 @@ export const SignupForm = ({ history }) => {
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
-      data.append("upload_preset", "esports-elevated");
-      data.append("cloud_name", "djva5euno"); 
-      fetch("https://api.cloudinary.com/v1_1/djva5euno", {
+      data.append("upload_preset", "notezipper");
+      data.append("cloud_name", "piyushproj");
+      fetch("https://api.cloudinary.com/v1_1/piyushproj/image/upload", {
         method: "post",
         body: data,
       })
@@ -55,16 +56,16 @@ export const SignupForm = ({ history }) => {
 
   useEffect(() => {
     if (userInfo) {
-      history.push("/");
+      navigate('/');
     }
-  }, [history, userInfo]);
+  }, [navigate, userInfo]);
 
   const submitHandler = (e) => {
     e.preventDefault();
 
     if (password !== confirmpassword) {
       setMessage("Passwords do not match");
-    } else dispatch(login(name, email, password, pic));
+    } else dispatch(signup(name, email, password, pic));
   };
 
   return (
@@ -142,3 +143,4 @@ export const SignupForm = ({ history }) => {
   );
 }
 
+export default SignupPage;
