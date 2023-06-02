@@ -43,9 +43,6 @@ setDateCreated(data.dateCreated);
 console.error(error);
 }
 };
-
-scss
-Copy code
 fetchData();
 }, [id]);
 
@@ -61,8 +58,7 @@ e.preventDefault();
 dispatch(updateTeam(id, name, country, city, dateCreated));
 if (!name || !country || !city || !dateCreated) return;
 
-scss
-Copy code
+
 resetHandler();
 navigate("/teams");
 };
@@ -79,8 +75,6 @@ return (
 <ErrorMessage variant="danger">{errorDelete}</ErrorMessage>
 )}
 
-php
-Copy code
         <Form.Group controlId="name">
           <Form.Label>Team Name</Form.Label>
           <Form.Control
