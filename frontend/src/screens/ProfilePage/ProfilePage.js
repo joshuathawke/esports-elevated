@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfile } from "../../actions/userActions";
 import MainScreen from "../../components/MainScreen";
@@ -11,10 +11,10 @@ import "./ProfilePage.css";
 const ProfilePage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [pic, setPic] = useState();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [picMessage, setPicMessage] = useState();
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [picMessage, setPicMessage] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -26,42 +26,27 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (!userInfo) {
-      navigate('/');
+      navigate("/");
     } else {
       setName(userInfo.name);
       setEmail(userInfo.email);
-      setPic(userInfo.pic);
     }
   }, [navigate, userInfo]);
 
-  const postDetails = (pics) => {
-    setPicMessage(null);
-    if (pics.type === "image/jpeg" || pics.type === "image/png") {
-      const data = new FormData();
-      data.append("file", pics);
-      data.append("upload_preset", "esports-elevated");
-      data.append("cloud_name", "djva5euno");
-      fetch("https://api.cloudinary.com/v1_1/djva5euno", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setPic(data.url.toString());
-          console.log(pic);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      return setPicMessage("Please Select an Image");
-    }
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
+    setPicMessage("");
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
 
-    dispatch(updateProfile({ name, email, password, pic }));
+    if (password !== confirmPassword) {
+      setPicMessage("Passwords do not match");
+    } else {
+      dispatch(updateProfile({ name, email, password, selectedFile }));
+    }
   };
 
   return (
@@ -118,12 +103,10 @@ const ProfilePage = () => {
               )}
               <Form.Group controlId="pic">
                 <Form.Label>Change Profile Picture</Form.Label>
-                <Form.File
-                  onChange={(e) => postDetails(e.target.files[0])}
-                  id="custom-file"
-                  type="image/png"
-                  label="Upload Profile Picture"
-                  custom
+                <Form.Control
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
                 />
               </Form.Group>
               <Button type="submit" variant="primary">
@@ -138,12 +121,18 @@ const ProfilePage = () => {
               justifyContent: "center",
             }}
           >
-            <img src={pic} alt={name} className="profilePic" />
+            {userInfo.pic ? (
+              <img src={userInfo.pic} alt={name} className="profilePic" />
+            ) : (
+              <div className="defaultProfilePic">
+                <span>No Profile Picture</span>
+              </div>
+            )}
           </Col>
         </Row>
       </div>
     </MainScreen>
   );
-}
+};
 
 export default ProfilePage;

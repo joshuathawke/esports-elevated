@@ -10,12 +10,12 @@ import ErrorMessage from "../../components/ErrorMessage";
 const Teams = ({ search }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const teamsData = useSelector((state) => state.teamList);
   const { loading, error, teams } = teamsData;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-
   const teamDelete = useSelector((state) => state.teamDelete);
   const {
     loading: loadingDelete,
@@ -37,7 +37,7 @@ const Teams = ({ search }) => {
   };
 
   return (
-    <MainScreen title={`Welcome Back ${userInfo && userInfo.name}..`}>
+    <MainScreen title={userInfo ? `Welcome Back ${userInfo.name}..` : 'Welcome to the Teams Page'}>
       {console.log(teams)}
       <Link to="/createTeam">
         <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">

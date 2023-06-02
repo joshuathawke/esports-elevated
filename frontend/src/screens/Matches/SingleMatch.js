@@ -6,13 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteMatch, updateMatch } from "../../actions/matchActions";
 import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
+import { useParams } from "react-router-dom";
 
 
-const SingleMatch = ({ match, history }) => {
+const SingleMatch = ({ match: propsMatch, history }) => {
   const [team1, setTeam1] = useState("");
   const [team2, setTeam2] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const { match } = useParams();
 
   const dispatch = useDispatch();
 
@@ -31,8 +33,8 @@ const SingleMatch = ({ match, history }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const { data } = await axios.get(`/api/matches/${match.params.id}`);
+  try {
+    const { data } = await axios.get(`/api/matches/${match}`);
         setTeam1(data.team1);
         setTeam2(data.team2);
         setStartTime(data.startTime);
@@ -43,7 +45,7 @@ const SingleMatch = ({ match, history }) => {
     };
 
     fetchData();
-  }, [match.params.id]);
+  }, [match, match.params.id]);
 
   const resetHandler = () => {
     setTeam1("");

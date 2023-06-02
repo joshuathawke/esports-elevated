@@ -51,7 +51,7 @@ const Matches = ({ search }) => {
   };
 
   return (
-    <MainScreen title={`Welcome Back ${userInfo && userInfo.name}..`}>
+    <MainScreen title={userInfo ? `Welcome Back ${userInfo.name}..` : 'Welcome to the Matches Page'}>
       {console.log(matches)}
       <Link to="/createMatch">
         <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">

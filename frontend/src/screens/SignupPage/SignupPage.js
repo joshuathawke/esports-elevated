@@ -15,7 +15,7 @@ function SignupPage() {
     "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
   );
   const [password, setPassword] = useState("");
-  const [confirmpassword, setConfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
   const [picMessage, setPicMessage] = useState(null);
 
@@ -25,34 +25,34 @@ function SignupPage() {
   const userSignup = useSelector((state) => state.userSignup);
   const { loading, error, userInfo } = userSignup;
 
-  const postDetails = (pics) => {
-    if (
-      pics ===
-      "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
-    ) {
-      return setPicMessage("Please Select an Image");
-    }
-    setPicMessage(null);
-    if (pics.type === "image/jpeg" || pics.type === "image/png") {
-      const data = new FormData();
-      data.append("file", pics);
-      data.append("upload_preset", "esports-elevated");
-      data.append("cloud_name", "djva5euno");
-      fetch("https://api.cloudinary.com/v1_1/djva5euno", {
-        method: "post",
-        body: data,
+const postDetails = (pics) => {
+  if (
+    pics ===
+    "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
+  ) {
+    return setPicMessage("Please Select an Image");
+  }
+  setPicMessage(null);
+  if (pics.type === "image/jpeg" || pics.type === "image/png") {
+    const data = new FormData();
+    data.append("file", pics);
+    data.append("upload_preset", "esports-elevated");
+    data.append("cloud_name", "djva5euno");
+    fetch("https://api.cloudinary.com/v1_1/djva5euno/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setPic(data.url);
       })
-        .then((res) => res.json())
-        .then((data) => {
-          setPic(data.url.toString());
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      return setPicMessage("Please Select an Image");
-    }
-  };
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    return setPicMessage("Please Select an Image");
+  }
+};
 
   useEffect(() => {
     if (userInfo) {
@@ -63,9 +63,11 @@ function SignupPage() {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    if (password !== confirmpassword) {
+    if (password !== confirmPassword) {
       setMessage("Passwords do not match");
-    } else dispatch(signup(name, email, password, pic));
+    } else {
+      dispatch(signup(name, email, password, pic));
+    }
   };
 
   return (
@@ -78,7 +80,7 @@ function SignupPage() {
           <Form.Group controlId="name">
             <Form.Label>Name</Form.Label>
             <Form.Control
-              type="name"
+              type="text"
               value={name}
               placeholder="Enter name"
               onChange={(e) => setName(e.target.value)}
@@ -109,7 +111,7 @@ function SignupPage() {
             <Form.Label>Confirm Password</Form.Label>
             <Form.Control
               type="password"
-              value={confirmpassword}
+              value={confirmPassword}
               placeholder="Confirm Password"
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
@@ -118,14 +120,14 @@ function SignupPage() {
           {picMessage && (
             <ErrorMessage variant="danger">{picMessage}</ErrorMessage>
           )}
+
           <Form.Group controlId="pic">
-            <Form.Label>Profile Picture</Form.Label>
-            <Form.File
+            <Form.Label>Change Profile Picture</Form.Label>
+            <Form.Control
+              type="file"
               onChange={(e) => postDetails(e.target.files[0])}
-              id="custom-file"
-              type="image/png"
               label="Upload Profile Picture"
-              custom
+              custom="true" 
             />
           </Form.Group>
 
@@ -133,9 +135,10 @@ function SignupPage() {
             Sign Up
           </Button>
         </Form>
+
         <Row className="py-3">
           <Col>
-            Have an Account ? <Link to="/login">Login</Link>
+            Have an Account? <Link to="/login">Login</Link>
           </Col>
         </Row>
       </div>

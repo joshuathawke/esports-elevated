@@ -37,7 +37,7 @@ const Tournaments = ({ search }) => {
   };
 
   return (
-    <MainScreen title={`Welcome Back ${userInfo && userInfo.name}..`}>
+    <MainScreen title={userInfo ? `Welcome Back ${userInfo.name}..` : 'Welcome to the Tournaments Page'}>
       <Link to="/createTournament">
         <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">
           Create New Tournament
