@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   TOURNAMENT_LIST_REQUEST,
   TOURNAMENT_LIST_SUCCESS,
@@ -12,7 +12,7 @@ import {
   TOURNAMENT_DELETE_REQUEST,
   TOURNAMENT_DELETE_SUCCESS,
   TOURNAMENT_DELETE_FAIL,
-} from '../constants/tournamentConstants';
+} from "../constants/tournamentConstants";
 
 export const tournamentList = () => async (dispatch, getState) => {
   try {
@@ -28,7 +28,7 @@ export const tournamentList = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get('/api/tournament', config);
+    const { data } = await axios.get("/api/tournament", config);
 
     dispatch({
       type: TOURNAMENT_LIST_SUCCESS,
@@ -45,67 +45,81 @@ export const tournamentList = () => async (dispatch, getState) => {
   }
 };
 
-export const createTournament = (name, description) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: TOURNAMENT_CREATE_REQUEST });
+export const createTournament =
+  (name, startDate, endDate) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: TOURNAMENT_CREATE_REQUEST });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const {
+        userLogin: { userInfo },
+      } = getState();
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
 
-    const { data } = await axios.post('/api/tournament/create', { name, description }, config);
+      const { data } = await axios.post(
+        "/api/tournaments/create",
+        { name, startDate, endDate },
+        config
+      );
 
-    dispatch({
-      type: TOURNAMENT_CREATE_SUCCESS,
-      payload: data,
-    });
+      dispatch({
+        type: TOURNAMENT_CREATE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({
+        type: TOURNAMENT_CREATE_FAIL,
+        payload: message,
+      });
+    }
+  };
 
-  } catch (error) {
-    const message = error.response && error.response.data.message ? error.response.data.message : error.message;
-    dispatch({
-      type: TOURNAMENT_CREATE_FAIL,
-      payload: message,
-    });
-  }
-};
+export const updateTournament =
+  (id, name, description) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: TOURNAMENT_UPDATE_REQUEST });
 
-export const updateTournament = (id, name, description) => async (dispatch, getState) => { 
-  try {
-    dispatch({ type: TOURNAMENT_UPDATE_REQUEST });
+      const {
+        userLogin: { userInfo },
+      } = getState();
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
+      const { data } = await axios.put(
+        `/api/tournament/${id}`,
+        { name, description },
+        config
+      );
 
-    const { data } = await axios.put(`/api/tournament/${id}`, { name, description }, config);
-
-    dispatch({
-      type: TOURNAMENT_UPDATE_SUCCESS,
-      payload: data,
-    });
-
-  } catch (error) {
-    const message = error.response && error.response.data.message? error.response.data.message : error.message;
-    dispatch({
-      type: TOURNAMENT_UPDATE_FAIL,
-      payload: message,
-    });
-  }
-};
+      dispatch({
+        type: TOURNAMENT_UPDATE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({
+        type: TOURNAMENT_UPDATE_FAIL,
+        payload: message,
+      });
+    }
+  };
 
 export const deleteTournament = (id) => async (dispatch, getState) => {
   try {
@@ -117,7 +131,7 @@ export const deleteTournament = (id) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -129,7 +143,10 @@ export const deleteTournament = (id) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
-    const message = error.response && error.response.data.message? error.response.data.message : error.message;
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
     dispatch({
       type: TOURNAMENT_DELETE_FAIL,
       payload: message,

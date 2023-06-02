@@ -62,7 +62,7 @@ export const createTeam =
       };
 
       const { data } = await axios.post(
-        "/api/teams",
+        "/api/teams/create",
         { name, country, city, dateCreated },
         config
       );
