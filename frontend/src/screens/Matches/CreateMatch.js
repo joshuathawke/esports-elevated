@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createMatch } from "../../actions/matchActions";
 import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
+import { useNavigate } from "react-router-dom";
 
 const CreateMatch = ({ history }) => {
   const [team1, setTeam1] = useState("");
@@ -13,6 +14,7 @@ const CreateMatch = ({ history }) => {
   const [endTime, setEndTime] = useState("");
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const matchCreate = useSelector((state) => state.matchCreate);
   const { loading, error } = matchCreate;
@@ -30,7 +32,7 @@ const CreateMatch = ({ history }) => {
     if (!team1 || !team2 || !startTime || !endTime) return;
 
     resetHandler();
-    history.push("/matches");
+    navigate('/matches');
   };
 
   return (

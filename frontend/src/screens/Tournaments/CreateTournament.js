@@ -5,14 +5,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { createTournament } from "../../actions/tournamentActions";
 import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
+import { useNavigate } from "react-router-dom";
 
-const CreateTournament = ({ history }) => {
+const CreateTournament = () => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const tournamentCreate = useSelector((state) => state.tournamentCreate);
   const { loading, error } = tournamentCreate;
@@ -30,7 +32,7 @@ const CreateTournament = ({ history }) => {
     if (!name || !location || !startDate || !endDate) return;
 
     resetHandler();
-    history.push("/tournaments");
+    navigate("/tournaments");
   };
 
   return (
