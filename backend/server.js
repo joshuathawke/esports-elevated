@@ -1,26 +1,24 @@
-const express = require('express');
-const users = require('./data/users');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
-const userRoutes = require('./routes/userRoutes');
-const tournamentsRoutes = require('./routes/tournamentsRoutes');
-const teamsRoutes = require('./routes/teamsRoutes');
-const matchesRoutes = require('./routes/matchesRoutes');
-const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
-const path = require('path');
+const express = require("express");
+const users = require("./data/users");
+const dotenv = require("dotenv");
+const connectDB = require("./config/db");
+const userRoutes = require("./routes/userRoutes");
+const tournamentsRoutes = require("./routes/tournamentsRoutes");
+const teamsRoutes = require("./routes/teamsRoutes");
+const matchesRoutes = require("./routes/matchesRoutes");
+const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
+const path = require("path");
 
 const app = express();
 dotenv.config();
 connectDB();
 app.use(express.json());
 
-// Route handlers
-app.use('/api/users', userRoutes)
-app.use('/api/tournaments', tournamentsRoutes)
-app.use('/api/teams', teamsRoutes)
-app.use('/api/matches', matchesRoutes)
+app.use("/api/users", userRoutes);
+app.use("/api/tournaments", tournamentsRoutes);
+app.use("/api/teams", teamsRoutes);
+app.use("/api/matches", matchesRoutes);
 
-// Deployment configuration
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/build")));
 
@@ -33,7 +31,6 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// Error handling middleware
 app.use(notFound);
 app.use(errorHandler);
 

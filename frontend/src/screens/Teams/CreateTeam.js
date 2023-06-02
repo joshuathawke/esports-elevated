@@ -16,7 +16,8 @@ const CreateTeam = () => {
   const dispatch = useDispatch();
 
   const teamCreate = useSelector((state) => state.teamCreate);
-  const { loading, error } = teamCreate;
+  const { loading } = teamCreate;
+  const [error, setError] = useState("");
 
   const resetHandler = () => {
     setName("");
@@ -25,13 +26,20 @@ const CreateTeam = () => {
     setDateCreated("");
   };
 
-    const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    dispatch(createTeam(name, country, city, dateCreated));
-    if (!name || !country || !city || !dateCreated) return;
+    if (!name || !country || !city || !dateCreated) {
+      setError("Please fill in all fields");
+      return;
+    }
 
-    resetHandler();
-    navigate("/teams"); 
+    try {
+      dispatch(createTeam(name, country, city, dateCreated));
+      resetHandler();
+      navigate("/teams");
+    } catch (error) {
+      setError("Error creating team");
+    }
   };
 
   return (

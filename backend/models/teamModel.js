@@ -1,34 +1,34 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const teamSchema = new Schema({
   name: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   city: {
     type: String,
-    required: true
+    required: true,
   },
   country: {
     type: String,
-    required: true
+    required: true,
   },
   created_at: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
-  updated_at: {
-    type: Date,
-    default: Date.now
-  },
-  tournaments: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Tournament'
-  }]
+  // updated_at: {
+  //   type: Date,
+  //   default: Date.now
+  // },
+  // tournaments: [{
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Tournament'
+  // }]
 });
 
-const Team = mongoose.model('Team', teamSchema);
+const Team = mongoose.model("Team", teamSchema);
 
 module.exports = Team;

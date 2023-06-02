@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   TEAM_LIST_REQUEST,
   TEAM_LIST_SUCCESS,
@@ -12,7 +12,7 @@ import {
   TEAM_DELETE_REQUEST,
   TEAM_DELETE_SUCCESS,
   TEAM_DELETE_FAIL,
-} from '../constants/teamConstants';
+} from "../constants/teamConstants";
 
 export const teamList = () => async (dispatch, getState) => {
   try {
@@ -28,7 +28,7 @@ export const teamList = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get('/api/team', config);
+    const { data } = await axios.get("/api/team", config);
 
     dispatch({
       type: TEAM_LIST_SUCCESS,
@@ -45,67 +45,69 @@ export const teamList = () => async (dispatch, getState) => {
   }
 };
 
-export const createTeam = (name, description) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: TEAM_CREATE_REQUEST });
+export const createTeam =
+  (name, country, city, dateCreated) => async (dispatch) => {
+    try {
+      dispatch({ type: TEAM_CREATE_REQUEST });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const { data } = await axios.post("/api/teams", {
+        name,
+        country,
+        city,
+        dateCreated,
+      });
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
+      dispatch({
+        type: TEAM_CREATE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: TEAM_CREATE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+export const updateTeam =
+  (id, name, description) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: TEAM_UPDATE_REQUEST });
 
-    const { data } = await axios.post('/api/team/create', { name, description }, config);
+      const {
+        userLogin: { userInfo },
+      } = getState();
 
-    dispatch({
-      type: TEAM_CREATE_SUCCESS,
-      payload: data,
-    });
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
 
-  } catch (error) {
-    const message = error.response && error.response.data.message ? error.response.data.message : error.message;
-    dispatch({
-      type: TEAM_CREATE_FAIL,
-      payload: message,
-    });
-  }
-};
+      const { data } = await axios.put(
+        `/api/team/${id}`,
+        { name, description },
+        config
+      );
 
-export const updateTeam = (id, name, description) => async (dispatch, getState) => { 
-  try {
-    dispatch({ type: TEAM_UPDATE_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.put(`/api/team/${id}`, { name, description }, config);
-
-    dispatch({
-      type: TEAM_UPDATE_SUCCESS,
-      payload: data,
-    });
-
-  } catch (error) {
-    const message = error.response && error.response.data.message? error.response.data.message : error.message;
-    dispatch({
-      type: TEAM_UPDATE_FAIL,
-      payload: message,
-    });
-  }
-};
+      dispatch({
+        type: TEAM_UPDATE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({
+        type: TEAM_UPDATE_FAIL,
+        payload: message,
+      });
+    }
+  };
 
 export const deleteTeam = (id) => async (dispatch, getState) => {
   try {
@@ -117,7 +119,7 @@ export const deleteTeam = (id) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -129,7 +131,10 @@ export const deleteTeam = (id) => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
-    const message = error.response && error.response.data.message? error.response.data.message : error.message;
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
     dispatch({
       type: TEAM_DELETE_FAIL,
       payload: message,
