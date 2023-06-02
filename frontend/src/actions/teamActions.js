@@ -46,28 +46,39 @@ export const teamList = () => async (dispatch, getState) => {
 };
 
 export const createTeam =
-  (name, country, city, dateCreated) => async (dispatch) => {
+  (name, country, city, dateCreated) => async (dispatch, getState) => {
     try {
       dispatch({ type: TEAM_CREATE_REQUEST });
 
-      const { data } = await axios.post("/api/teams", {
-        name,
-        country,
-        city,
-        dateCreated,
-      });
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/teams",
+        { name, country, city, dateCreated },
+        config
+      );
 
       dispatch({
         type: TEAM_CREATE_SUCCESS,
         payload: data,
       });
     } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
       dispatch({
         type: TEAM_CREATE_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
+        payload: message,
       });
     }
   };
