@@ -23,9 +23,9 @@ const App = () => (
         <Route path="/teams" element={<Teams />} />
         <Route path="/tournaments" element={<Tournaments />} />
         <Route path="/matches" element={<Matches />} />
-        <Route path="/creatematch" element={<CreateMatch />} />
-        <Route path="/createteam" element={<CreateTeam />} />
-        <Route path="/createtournament" element={<CreateTournament />}/>
+        <Route path="/createMatch" element={<CreateMatch />} />
+        <Route path="/createTeam" element={<CreateTeam />} />
+        <Route path="/createTournament" element={<CreateTournament />}/>
         <Route path="/match/:id" element={<SingleMatch />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/profile" element={<ProfilePage />} />

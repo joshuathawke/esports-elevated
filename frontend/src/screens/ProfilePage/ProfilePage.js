@@ -8,7 +8,7 @@ import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
 import "./ProfilePage.css";
 
-const ProfilePage = ({ location, history }) => {
+function ProfilePage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pic, setPic] = useState();
