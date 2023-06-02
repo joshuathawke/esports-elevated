@@ -6,18 +6,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteMatch, updateMatch } from "../../actions/matchActions";
 import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; 
 
-
-const SingleMatch = ({ match: propsMatch, history }) => {
+const SingleMatch = () => { 
   const [team1, setTeam1] = useState("");
   const [team2, setTeam2] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const { match } = useParams();
-
+  
   const dispatch = useDispatch();
-
+  const navigate = useNavigate(); 
+  
   const matchUpdate = useSelector((state) => state.matchUpdate);
   const { loading, error } = matchUpdate;
 
@@ -28,13 +28,13 @@ const SingleMatch = ({ match: propsMatch, history }) => {
     if (window.confirm("Are you sure?")) {
       dispatch(deleteMatch(id));
     }
-    history.push("/matches");
+    navigate("/matches");
   };
 
   useEffect(() => {
     const fetchData = async () => {
-  try {
-    const { data } = await axios.get(`/api/matches/${match}`);
+      try {
+        const { data } = await axios.get(`/api/matches/${match}`);
         setTeam1(data.team1);
         setTeam2(data.team2);
         setStartTime(data.startTime);
@@ -45,7 +45,7 @@ const SingleMatch = ({ match: propsMatch, history }) => {
     };
 
     fetchData();
-  }, [match, match.params.id]);
+  }, [match]);
 
   const resetHandler = () => {
     setTeam1("");
@@ -60,7 +60,7 @@ const SingleMatch = ({ match: propsMatch, history }) => {
     if (!team1 || !team2 || !startTime || !endTime) return;
 
     resetHandler();
-    history.push("/matches");
+    navigate("/matches"); 
   };
 
   return (

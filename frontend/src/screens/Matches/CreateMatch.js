@@ -7,7 +7,7 @@ import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useNavigate } from "react-router-dom";
 
-const CreateMatch = ({ history }) => {
+const CreateMatch = () => {
   const [team1, setTeam1] = useState("");
   const [team2, setTeam2] = useState("");
   const [startTime, setStartTime] = useState("");
